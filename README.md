@@ -2,7 +2,9 @@
 
 This workspace is for using the **Playwright Planner, Generator, and Healer** together to build and maintain browser tests. The Nova Shop suite is the working example: Planner explores the app and creates a test plan, Generator turns the plan into Playwright specs, and Healer diagnoses and repairs failing tests.
 
-[Nova Shop](https://www.practiceqaautomation.com/shop) is a public e-commerce practice app from PracticeQAAutomation. This project tests its hosted UI with Playwright Test; it does not contain the application itself.
+[Nova Shop](https://www.practiceqaautomation.com/shop) is the e-commerce practice app on [PracticeQAAutomation](https://www.practiceqaautomation.com), a site I built so QA engineers can practise automation on realistic applications. This project tests its hosted UI with Playwright Test; it does not contain the application itself.
+
+> **Practising browser automation?** Nova Shop is open for you to automate against: sign-in, search and filters, cart and coupons, checkout, and order history, with stable `data-testid` attributes. Clone this repo to run the suite as it is, or point your own framework at [practiceqaautomation.com](https://www.practiceqaautomation.com).
 
 **Coverage:** sign-in · product discovery · cart and coupons · checkout · order history  
 **Active browser project:** Chromium. Firefox and WebKit projects are defined but currently commented out.
@@ -42,7 +44,7 @@ flowchart LR
 
 The Planner, Generator, and Healer are provided by the VS Code Playwright Agents environment; this repository contains the target-specific plan and tests, not implementations of those agents. The Playwright MCP server used for browser interaction is configured in [`.vscode/mcp.json`](.vscode/mcp.json).
 
-In this workspace, the plan is [`specs/nova-shop-core-operations.plan.md`](specs/nova-shop-core-operations.plan.md), and the five scenario specs live directly in `tests/`.
+In this workspace, the plan is [`specs/nova-shop-core-operations.plan.md`](specs/nova-shop-core-operations.plan.md), and the five scenario specs and the end-to-end happy path live directly in `tests/`.
 
 ## Quick Start
 
@@ -111,6 +113,13 @@ The Nova Shop tests demonstrate the artifacts produced and maintained through th
 | Cart and coupons | [`tests/cart-coupon.spec.ts`](tests/cart-coupon.spec.ts) | Variant selection, quantity changes, invalid and valid coupons, removal |
 | Checkout | [`tests/checkout.spec.ts`](tests/checkout.spec.ts) | Required-field validation, express shipping, declined card, COD order |
 | Order history | [`tests/order-history.spec.ts`](tests/order-history.spec.ts) | Place an order, inspect its record, verify persistence after reload |
+| End-to-end happy path | [`tests/e2e-positive-flow.spec.ts`](tests/e2e-positive-flow.spec.ts) | Sign in, search, choose a colour, apply a coupon, check out with standard shipping and COD, verify the order in history |
+
+The happy path is one continuous shopper journey. Run it on its own in a visible browser with:
+
+```bash
+npm run test:qa:chromium:headed -- tests/e2e-positive-flow.spec.ts
+```
 
 The written test plan is available at [`specs/nova-shop-core-operations.plan.md`](specs/nova-shop-core-operations.plan.md).
 
@@ -124,6 +133,7 @@ Playwright configuration lives in [`playwright.config.ts`](playwright.config.ts)
 - Dotenv loads local `.env` values before configuration; CI can provide variables directly.
 - `use.baseURL` is resolved from the selected environment in `test-data/shopTestData.ts`.
 - Chromium is the only active project; Firefox and WebKit definitions are currently commented out.
+- Chromium opens maximized: the viewport is unset so the page fills the window, which is 1920×1080 in headless runs.
 - Tests run in parallel by default. In CI, retries are enabled and worker count is limited to one.
 - Traces are collected on the first retry.
 
@@ -180,6 +190,7 @@ The demo's declined-payment test card is a public sandbox value, not a real paym
 ├── tests/                      # Executable end-to-end scenarios
 │   ├── cart-coupon.spec.ts
 │   ├── checkout.spec.ts
+│   ├── e2e-positive-flow.spec.ts
 │   ├── order-history.spec.ts
 │   ├── product-discovery.spec.ts
 │   └── sign-in-session.spec.ts
@@ -200,3 +211,7 @@ The boundaries are intentional: scenarios live directly in `tests/`; selectors a
 ## Artifacts
 
 Playwright writes test results to `test-results/` and the HTML report to `playwright-report/`. These generated directories are excluded from Git by [`.gitignore`](.gitignore).
+
+## About PracticeQAAutomation
+
+Nova Shop is a product of [PracticeQAAutomation](https://www.practiceqaautomation.com), which I built and maintain as a practice ground for QA engineers. If you use it to learn Playwright or any other automation tool, feedback and suggestions are welcome through this repository's issues.

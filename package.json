@@ -11,6 +11,7 @@
     "test:firefox": "playwright test --project=firefox",
     "test:webkit": "playwright test --project=webkit",
     "test:qa:chromium": "cross-env TEST_ENV=qa playwright test --project=chromium",
+    "test:qa:chromium:headed": "cross-env TEST_ENV=qa playwright test --project=chromium --headed",
     "test:stage:chromium": "cross-env TEST_ENV=stage playwright test --project=chromium",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",

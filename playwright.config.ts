@@ -38,7 +38,17 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        /* Maximize the browser: a null viewport lets the page fill the window.
+           deviceScaleFactor must be unset, as it cannot be combined with a null viewport.
+           --window-size covers headless runs and macOS, where --start-maximized is ignored. */
+        viewport: null,
+        deviceScaleFactor: undefined,
+        launchOptions: {
+          args: ['--start-maximized', '--window-size=1920,1080'],
+        },
+      },
     },
 
     // {
